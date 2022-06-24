@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+{% for project in page_obj %}
+<div class="row justify-content-center">
+	<div class="col-6">
+	<div class="card mb-3">
+		<div class="card-body">
+			<a href="{{ project.get_absolute_url }}" class="text-decoration-none"><h5 class="card-title">{{ project.company }} - {{ project.title }}</h5></a>
+		</div>
+		<ul class="list-group list-group-flush">
+			<li class="list-group-item"><b>Lecture time:</b> {{ project.lecturetimes.all|join:", " }}</li>
+            <li class="list-group-item"><b>Lab time:</b> {{ project.labtimes.all|join:", " }}</li>
+			<li class="list-group-item"><b>Domain:</b> {{ project.domain }}</li>
+			<li class="list-group-item"><b>Keywords:</b> {{ project.keywords.all|join:", " }}</li>
+			<li class="list-group-item"><b>Tools:</b> {{ project.tools.all|join:", " }}</li>
+			<li class="list-group-item"><b>Citizenship:</b> {{ project.citizenship_status }}</li>
+  		</ul>
+		<div class="card-body">
+			<h6 class="card-text">Summary</h6>
+			<p class="card-text">{{ project.summary }}</p>
+		</div>
+            <div class="card-footer">
+                <div class="row">
+                    <small class="text-muted col-sm-6 text-start">AY {{ project.year }} - {{ project.year|add:"1" }}</small>
+			        <small class="text-muted col-sm-6 text-end">Last updated: {{ project.updated_at }}</small>
+                </div>
+            </div>
+	</div>
+	</div>
+</div>
+{% empty %}
+<h2>No projects found</h2>
+{% endfor %}
+
+<nav>
+	<ul class="pagination justify-content-center">
+		{% if page_obj.has_previous %}
+		<li class="page-item">
+			<a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+		</li>
+		{% else %}
+		<li class="page-item disabled">
+			<a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+		</li>
+		{% endif %}
+
+		<li class="page-item"><a class="page-link" href="#">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</a></li>
+
+		{% if page_obj.has_next %}
+		<li class="page-item">
+			<a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+		</li>
+		{% else %}
+		<li class="page-item disabled">
+			<a class="page-link" tabindex="-1" aria-disabled="true" href="#">Next</a>
+		</li>
+		{% endif %}
+	</ul>
+</nav>
+
+{% endblock content %}
