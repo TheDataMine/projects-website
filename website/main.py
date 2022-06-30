@@ -12,7 +12,7 @@ app = FastAPI()
 templates = Jinja2Templates(directory='templates/')
 
 class Company(BaseModel):
-    name: Optional[str]
+    name: str
     address: str
 
 
@@ -37,26 +37,16 @@ async def get_companies(request: Request):
 
     companies = [v[0] for v in queries.get_all_companies(conn)]
 
-    companies = [Company(name=v) for v in companies]
+    #companies = [Company(name=v) for v in companies]
+
     print(f"{companies=}")
-    
-    # inspecting request object for fun
-    print(f"{request.method=}")
-    print(request.url)
-    print(request.headers)
-    print(request.query_params)
-    print(request.path_params)
-    print(request.client)
-    print(request.cookies)
-    print(request.json())
 
     accept = request.headers.get("accept")
-    hello_world = {"message": "hello world"}
 
     if accept.split("/")[1] == 'json':
         return companies
 
     if len(accept.split(",")) > 1 or accept.split("/")[1] == 'html':
-        response = templates.TemplateResponse("companies.html", {"request": request, "payload1": companies}) 
+        response = templates.TemplateResponse("test_templates/companies.html", {"request": request, "payload1": companies}) 
         return response
 
